@@ -1,0 +1,50 @@
+.custom-container {
+    width: auto;
+    display: flex;
+}
+
+.custom-item {
+    flex: 1;
+    margin-top: -3px;
+    margin-left: -3px;
+    padding: 2px;
+    background-clip: content-box;
+    border-radius: 3px;
+    text-align: center;
+}
+
+.custom-item i {
+    margin: auto;
+}
+
+.App {
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.custom-timer {
+    margin-top: 50px;
+    text-align: center;
+}
+
+.custom-solver {
+    margin-top: 50px;
+    border: 1px solid black;
+}
+
+.custom-cluster {
+    margin-top: 50px;
+    text-align: center;
+    font-size: 50px;
+}
+
+.custom-cluster-icons {
+    font-size: 50px;
+}
+
+.custom-timer button {
+    margin-right: 10px;
+    margin-left: 10px; 
+    margin-top: 10px;
+    margin-bottom: 10px; 
+}
