@@ -10,7 +10,7 @@ import ShowNext from './ShowNext'
 class App extends Component {
   constructor(props) {
     super(props);
-    let sky = new Sky(16, 16, 4)
+    let sky = new Sky(false)
     this.state = {
       sky: sky,
       nextCluster: null
@@ -56,6 +56,9 @@ class App extends Component {
           styles[i][j]['color'] = cluster.color
           styles[i][j]['backgroundColor'] = '#adafa8'
           values[i][j] = <i className="material-icons custom-icons">{cluster.type}</i>
+        }
+        if (regions[i][j].oldStar) {
+          styles[i][j]['backgroundColor'] = regions[i][j].oldStarColor
         }
         if (regions[i][j].star != null) {
           let star = regions[i][j].star
@@ -115,6 +118,12 @@ class App extends Component {
     })
   }
 
+  handleShow = (sky) => {
+    this.setState({
+      sky: sky
+    })
+  }
+
   render() {
     return (
       <div className="App container">
@@ -125,7 +134,7 @@ class App extends Component {
           {this.state.nextCluster==null &&  <ShowNext hasNext={false} type='null' color='null'/>}
           {this.state.nextCluster!=null &&  <ShowNext hasNext={true} type={this.state.nextCluster.type} color={this.state.nextCluster.color}/>}
           <Timer handleStart={this.handleStart} handleReset={this.handleReset} handleNext={this.handleNext} />
-          <Solver />
+          <Solver sky={this.state.sky} nextCluster={this.state.nextCluster} handleShow={this.handleShow}/>
         </div>
       </div>
     )

@@ -18,6 +18,7 @@ class Timer extends Component {
             minutes: minutes
         })
     }
+
     handleStart = () => {
         this.setState({
             running: true
@@ -68,7 +69,6 @@ class Timer extends Component {
             </div>
         )
     }
-
 }
 
 export default Timer

@@ -9,7 +9,17 @@ class Region {
         this._cluster = null
         this._star = null
         this._oldStar = false
+        this._oldStarColor = null
         this._isMiddle = false
+        this._isDouble = false
+    }
+
+    get isDouble() {
+        return this._isDouble
+    }
+
+    set isDouble(double) {
+        return this._isDouble = double
     }
 
     get isMiddle() {
@@ -42,6 +52,14 @@ class Region {
 
     set oldStar(star) {
         this._oldStar = star
+    }
+
+    get oldStarColor() {
+        return this._oldStarColor
+    }
+
+    set oldStarColor(color) {
+        this._oldStarColor = color
     }
 
     set upBlocked(block) {
