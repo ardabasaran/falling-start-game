@@ -57,14 +57,21 @@ class Solver extends Component {
     }
 
     render() {
-        return (
-            <div className="custom-solver col s4">
-                <h5>Solver</h5>
-                <button onClick={this.handleShow} className="waves-effect waves-light btn-large">
-                    {(this.props.nextCluster != null && this.props.nextCluster  === this.state.foundFor) ? (this.state.showSolution ? "Hide" : "Show") : "Solve" }
-                </button>
-            </div>
-        )
+        if ((this.props.nextCluster != null && this.props.nextCluster  === this.state.foundFor)) {
+            return (
+                <div className="custom-solver col s4">
+                    <h5>Found solution in {this.state.solution.numMoves} moves</h5>
+                        <button onClick={this.handleShow} className="waves-effect waves-light btn-large">
+                        {this.state.showSolution ? "Hide Solution" : "Show Solution"}
+                        </button>
+                </div>
+            )
+        } else {
+            return (
+                <div className="custom-solver col s4">
+                </div>
+            )
+        }
     }
 
     getDistanceMap(sky, nextCluster) {
