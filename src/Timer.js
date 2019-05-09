@@ -47,16 +47,17 @@ class Timer extends Component {
     }
 
     handleNext = () => {
-        this.setState({
-            running: true,
-            seconds: 0,
-            minutes: 0
-        })
-        clearInterval(this.timerID)
-        this.timerID = setInterval(() => {
-            this.incrementTime()
-        }, 1000);
-        this.props.handleNext()
+        if (this.props.handleNext()) {
+            this.setState({
+                running: true,
+                seconds: 0,
+                minutes: 0
+            })
+            clearInterval(this.timerID)
+            this.timerID = setInterval(() => {
+                this.incrementTime()
+            }, 1000);
+        }
     }
 
     render() {

@@ -32,8 +32,7 @@ class Sky {
             this._width = sky._width
             this._height = sky._height
             this._numStars = sky._numStars
-            this._nextClusterList = sky._nextClusterList
-            this._nextClusterCount = sky._nextClusterCount
+            this._nextClusterList = [...sky._nextClusterList]
             
             this._regions = new Array(sky._regions.length)
             for (let i = 0; i < sky._regions.length; i++) {
@@ -44,8 +43,7 @@ class Sky {
                     this._regions[i][j]._downBlocked = sky._regions[i][j]._downBlocked
                     this._regions[i][j]._rightBlocked = sky._regions[i][j]._rightBlocked
                     this._regions[i][j]._leftBlocked = sky._regions[i][j]._leftBlocked
-                    this._regions[i][j]._oldStar = sky._regions[i][j]._oldStar
-                    this._regions[i][j]._oldStarColor = sky._regions[i][j]._oldStarColor
+                    this._regions[i][j]._oldStarColor = [...sky._regions[i][j]._oldStarColor]
                     this._regions[i][j]._isMiddle = sky._regions[i][j]._isMiddle
                     this._regions[i][j]._isDouble = sky._regions[i][j]._isDouble
                 }
@@ -75,23 +73,15 @@ class Sky {
             this._initializeStars()
             this._nextClusterList = [...this._clusters]
             this._nextClusterList = _.shuffle(this._nextClusterList)
-            this._nextClusterCount = 0
         }
     }
 
     resetNextCluster() {
         this._nextClusterList = _.shuffle(this._nextClusterList)
-        this._nextClusterCount = 0
     }
 
-    getNextCluster() {
-        let val = this._nextClusterList[this._nextClusterCount]
-        this._nextClusterCount += 1
-        if (this._nextClusterCount === this._nextClusterList.length) {
-            this._nextClusterList = _.shuffle(this._nextClusterList)
-            this._nextClusterCount = 0
-        }
-        return val
+    get nextClusterList() {
+        return this._nextClusterList
     }
 
     get height() {

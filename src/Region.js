@@ -8,10 +8,13 @@ class Region {
         this._rightBlocked = false
         this._cluster = null
         this._star = null
-        this._oldStar = false
-        this._oldStarColor = null
+        this._oldStarColor = []
         this._isMiddle = false
         this._isDouble = false
+    }
+
+    resetOldStarColor() {
+        this._oldStarColor = []
     }
 
     get isDouble() {
@@ -46,20 +49,19 @@ class Region {
         this._cluster = cluster
     }
 
-    get oldStar() {
-        return this._oldStar
-    }
-
-    set oldStar(star) {
-        this._oldStar = star
-    }
-
     get oldStarColor() {
-        return this._oldStarColor
+        if (this._oldStarColor.length === 0) {
+            return null
+        }
+        return this._oldStarColor[this._oldStarColor.length-1]
     }
 
     set oldStarColor(color) {
-        this._oldStarColor = color
+        if (color == null) {
+            this._oldStarColor.pop()
+        } else {
+            this._oldStarColor.push(color)
+        }
     }
 
     set upBlocked(block) {

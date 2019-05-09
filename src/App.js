@@ -13,8 +13,12 @@ class App extends Component {
     let sky = new Sky(false)
     this.state = {
       sky: sky,
-      nextCluster: null
+      nextCluster: null,
+      nextClusterCounter: 0,
+      solution: null,
+      original: sky
     }
+    this.solverRef = React.createRef()
   }
 
   drawSky = () => {
@@ -57,14 +61,15 @@ class App extends Component {
           styles[i][j]['backgroundColor'] = '#adafa8'
           values[i][j] = <i className="material-icons custom-icons">{cluster.type}</i>
         }
-        if (regions[i][j].oldStar) {
-          styles[i][j]['backgroundColor'] = regions[i][j].oldStarColor
-        }
         if (regions[i][j].star != null) {
           let star = regions[i][j].star
           styles[i][j]['color'] = star.color
           values[i][j] = <i className="material-icons custom-icons">stars</i>
         }
+        else if (regions[i][j].oldStarColor) {
+          styles[i][j]['backgroundColor'] = regions[i][j].oldStarColor
+        }
+        
         if (regions[i][j].isMiddle) {
           styles[i][j]['backgroundColor'] = '#adafa8';
           styles[i][j]['borderBottom'] = '3px solid #adafa8';
@@ -87,15 +92,26 @@ class App extends Component {
     return rows
   }
 
+  getNextCluster() {
+    let val = this.state.nextClusterCounter
+    this.setState({
+      nextClusterCounter: (val +1)%16
+    })
+    return this.state.sky.nextClusterList[val]
+  }
+
   handleStart = () => {
     let sky = this.state.sky
     let cluster = this.state.nextCluster
     if (this.state.nextCluster == null) {
-      cluster = this.state.sky.getNextCluster()
+      cluster = this.getNextCluster()
     }
+    let solution = this.solverRef.current.getSolution(sky, cluster)
     this.setState({
       sky: sky,
-      nextCluster: cluster
+      original: sky,
+      nextCluster: cluster,
+      solution: solution.solutionSky
     })
   }
 
@@ -104,24 +120,43 @@ class App extends Component {
     let cluster = null
     sky.resetNextCluster()
     this.setState({
-      sky: sky,
-      nextCluster: cluster
+      nextCluster: cluster,
+      nextClusterCounter: 0 
     })
   }
 
   handleNext = () => {
-    let sky = this.state.sky
-    let cluster = this.state.sky.getNextCluster()
+    this.solverRef.current.hide()
+    if (this.state.nextCluster == null) {
+      return false
+    }
+    let solution = this.state.solution
+    for (let i = 0; i < 16; i++) {
+      for (let j = 0; j < 16; j++) {
+        solution.regions[i][j].resetOldStarColor()
+      }
+    }
+    let cluster = this.getNextCluster()
+    let new_solution = this.solverRef.current.getSolution(solution, cluster)
     this.setState({
-      sky: sky,
-      nextCluster: cluster
+      sky: solution,
+      original: solution,
+      nextCluster: cluster,
+      solution: new_solution.solutionSky
     })
+    return true
   }
 
-  handleShow = (sky) => {
-    this.setState({
-      sky: sky
-    })
+  handleShow = (val) => {
+    if (val) {
+      this.setState({
+        sky: this.state.solution
+      })
+    } else {
+      this.setState({
+        sky: this.state.original
+      })
+    }
   }
 
   render() {
@@ -134,7 +169,7 @@ class App extends Component {
           {this.state.nextCluster==null &&  <ShowNext hasNext={false} type='null' color='null'/>}
           {this.state.nextCluster!=null &&  <ShowNext hasNext={true} type={this.state.nextCluster.type} color={this.state.nextCluster.color}/>}
           <Timer handleStart={this.handleStart} handleReset={this.handleReset} handleNext={this.handleNext} />
-          <Solver sky={this.state.sky} nextCluster={this.state.nextCluster} handleShow={this.handleShow}/>
+          <Solver ref={this.solverRef} sky={this.state.sky} nextCluster={this.state.nextCluster} handleShow={this.handleShow}/>
         </div>
       </div>
     )
